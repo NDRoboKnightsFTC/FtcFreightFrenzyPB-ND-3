@@ -56,6 +56,11 @@ public class FTCAutoBasic {
                 linearOpMode.telemetry.update();
             }
             RobotLogCommon.d(TAG, "Finished driving the left front motor");
+            //Run the motor again until the touch sensor is pressed
+            while (!robot.digitalTouch.isPressed()) {
+                linearOpMode.telemetry.addData("Motor", "Driving until pressed");
+                linearOpMode.telemetry.update();
+            }
         } finally {
             robot.leftFrontMotor.setPower(0.0);
             RobotLogCommon.i(TAG, "Exiting FTCAutoBasic");
@@ -65,4 +70,3 @@ public class FTCAutoBasic {
     }
 
 }
-
