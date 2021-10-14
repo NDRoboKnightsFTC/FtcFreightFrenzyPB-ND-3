@@ -23,7 +23,7 @@ public class FTCAutoDispatch {
         // access to the public data fields and methods in LinearOpMode.
         try {
             RobotLogCommon.initialize(WorkingDirectory.getWorkingDirectory() + RobotConstants.logDir);
-            FTCAutoBasic runAuto = new FTCAutoBasic(pOpMode, pAlliance, pLinear);
+            FTCAuto runAuto = new FTCAuto(pOpMode, pAlliance, pLinear);
 
             pLinear.telemetry.addData(TAG, "Waiting for start ...");
             pLinear.telemetry.update();
