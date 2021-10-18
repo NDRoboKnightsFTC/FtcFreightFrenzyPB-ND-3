@@ -5,7 +5,7 @@
     </parameters>
     <actions>
 
-      <FORWARD_BY_TIME>
+      <!-- FORWARD_BY_TIME>
         <seconds>3.0</seconds>
         <velocity>0.5</velocity>
       </FORWARD_BY_TIME>
@@ -17,7 +17,16 @@
       <REVERSE_BY_TIME>
         <seconds>3.0</seconds>
         <velocity>-0.5</velocity>
-      </REVERSE_BY_TIME>
+      </REVERSE_BY_TIME --> 
+
+      <FORWARD_UNTIL_DISTANCE_OR_TOUCH> 
+        <distance>48.0</distance> 
+        <velocity>0.5</velocity> 
+      </FORWARD_UNTIL_DISTANCE_OR_TOUCH> 
+
+      <SLEEP>
+        <ms>1000</ms>
+      </SLEEP>
 
 
     </actions>

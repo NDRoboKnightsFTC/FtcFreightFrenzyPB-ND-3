@@ -40,7 +40,7 @@ public class FTCAuto {
     private static final double MOTOR_RPM = 150;
     private static final double MAX_VELOCITY = Math.floor((CLICKS_PER_MOTOR_REV * MOTOR_RPM) / 60); // clicks per second
     private static final double WHEEL_DIAMETER_IN = 4.0;
-    private static final double CLICKS_PER_INCH = CLICKS_PER_MOTOR_REV / (WHEEL_DIAMETER_IN * 3.1416);
+    private static final double CLICKS_PER_INCH = CLICKS_PER_MOTOR_REV / (WHEEL_DIAMETER_IN * Math.PI);
 
     // Main class for the autonomous run.
     public FTCAuto(RobotConstantsUltimateGoal.OpMode pAutoOpMode, RobotConstants.Alliance pAlliance, LinearOpMode pLinearOpMode)
@@ -121,6 +121,34 @@ public class FTCAuto {
 
         switch (commandName) {
 
+            case "FORWARD_UNTIL_DISTANCE_OR_TOUCH": {
+                int targetClicks = (int) (commandXPath.getDouble("distance") * CLICKS_PER_INCH);
+
+                if (targetClicks < 0)
+                    throw new AutonomousRobotException(TAG, "Distance must be positive.");
+
+                // The velocity factor must be positive and <= 1.0
+                double velocity = Math.abs(commandXPath.getDouble("velocity"));
+                if (velocity <= 0 || velocity > 1.0)
+                    throw new AutonomousRobotException(TAG, "Velocity out of range.");
+
+                //FTC Convention: you must set target clicks before RUN_TO_POSITION.
+                robot.leftFrontMotor.setTargetPosition(targetClicks);
+                robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                try {
+                    robot.leftFrontMotor.setPower(velocity);
+                    while(linearOpMode.opModeIsActive() && robot.leftFrontMotor.isBusy() && !robot.digitalTouch.isPressed()){
+
+                         linearOpMode.telemetry.addData("Driving", "Left front forward");
+                        linearOpMode.telemetry.update();
+                    }
+
+                } finally {
+                    robot.leftFrontMotor.setPower(0.0);
+                }
+                break;
+            }
             case "FORWARD_BY_TIME": {
                 ElapsedTime runtime = new ElapsedTime();
                 try {
